@@ -20,7 +20,7 @@ def infix_to_postfix(expression):
     postfix = []
     operand = ""
     for char in expression:
-        if char.isdigit():
+        if char.isdigit() or char == '.':
             operand += char
         else:
             if operand:
@@ -42,7 +42,37 @@ def infix_to_postfix(expression):
         postfix.append(stack.pop())
     return " ".join(postfix)
 
-calc = lambda exp : calculate(infix_to_postfix(exp))
+def time2Float(time):
+    time = time.split(':')
+    return float(time[0]) + float(time[1])/60 if len(time) == 2 else float(time[0])
 
-print(calc("(3+12)*3/15"))
+def float2Time(f):
+    h = int(f)
+    m = int(round((f - h) * 60,0))
+    return str(h) + ':' + f'{m:02d}'
+
+
+def replaceTimeWithFloat(expression):
+    time = ""
+    newExpression = ""
+    for index, char in enumerate(expression):
+        if char.isdigit() and index != len(expression)-1:
+            time += char
+            continue
+        if char in ':.,':
+            time += ':'
+            continue
+        if index == len(expression)-1:
+            time += char
+        if time:
+            newExpression += str(time2Float(time))
+            time = ""
+        newExpression += char if index != len(expression)-1 else ''
+    return newExpression
+
+def removeWhiteSpace(expression):
+    return ''.join(expression.split())
+
+calc = lambda exp : float2Time(calculate(infix_to_postfix(replaceTimeWithFloat(removeWhiteSpace(exp)))))
+
 

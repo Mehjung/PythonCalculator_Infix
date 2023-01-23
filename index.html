@@ -1,0 +1,42 @@
+<html>
+  <head>
+    <title>Postfix time calculator with PyScript</title>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="https://pyscript.net/latest/pyscript.css" />
+    <script defer src="https://pyscript.net/latest/pyscript.js"></script>
+  </head>
+  <body>
+
+    <py-config>
+        [[fetch]]
+        files = ["./calc.py"]
+    </py-config>
+    <py-script>
+        from calc import calc
+
+        result = Element("EingabeFenster")
+        result.element.onkeypress = lambda e: e.key == "Enter" and eval() or e.value
+
+        def eval():
+            res = calc(result.value)
+            print("Eingabe: " + res)
+            result.element.value = res
+            
+    </py-script>
+    <main>
+        <section>
+            <div class="text-center w-full mb-8">
+                <h1 class="text-3xl font-bold text-gray-800 uppercase tracking-tight">Eingabe:</h1>
+              </div>
+              <div>
+                <input id="EingabeFenster" class="py-input" type="text">
+                <button id="BerechneButton" class="py-button" type="submit" py-click="eval()">
+                  Berechne
+                </button>
+              </div>
+        </section>
+    </main>
+
+
+  </body>
+</html>
